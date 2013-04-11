@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<servlet>
+	    <servlet-name>onlyadmin</servlet-name>
+	    <servlet-class>ece1779.appengine.OnlyAdmin</servlet-class>
+	</servlet>
+  	<servlet-mapping>
+    		<servlet-name>onlyadmin</servlet-name>
+    		<url-pattern>/onlyadmin</url-pattern>
+  	</servlet-mapping>
+
+	<servlet>
+	    <servlet-name>prefs</servlet-name>
+	    <servlet-class>ece1779.appengine.PrefsServlet</servlet-class>
+	</servlet>	
+  	<servlet-mapping>
+    	<servlet-name>prefs</servlet-name>
+    	<url-pattern>/prefs</url-pattern>
+  	</servlet-mapping>
+
+	<servlet>
+    	<servlet-name>FileUpload</servlet-name>
+    	<servlet-class>ece1779.appengine.fileupload.FileUpload</servlet-class>
+  	</servlet>	
+  	<servlet-mapping>
+   	 	<servlet-name>FileUpload</servlet-name>
+    	<url-pattern>/FileUpload</url-pattern>
+  	</servlet-mapping>
+
+
+  	<security-constraint>
+    		<web-resource-collection>
+      			<web-resource-name>prefs</web-resource-name>
+      			<url-pattern>/prefs</url-pattern>
+    		</web-resource-collection>
+    		<auth-constraint>
+      			<role-name>*</role-name>
+    		</auth-constraint>
+  	</security-constraint>
+	
+	<servlet>
+		<servlet-name>Login</servlet-name>
+		<servlet-class>ece1779.appengine.Login</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>Login</servlet-name>
+		<url-pattern>/Login</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>HomePage</servlet-name>
+		<servlet-class>ece1779.appengine.HomePage</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>HomePage</servlet-name>
+		<url-pattern>/HomePage</url-pattern>
+	</servlet-mapping>
+	
+	<welcome-file-list>
+		<welcome-file>Login</welcome-file>
+	</welcome-file-list>
+
+
+	<security-constraint>
+    		<web-resource-collection>
+      			<web-resource-name>onlyadmin</web-resource-name>
+      			<url-pattern>/onlyadmin</url-pattern>
+    		</web-resource-collection>
+    		<auth-constraint>
+      			<role-name>admin</role-name>
+    		</auth-constraint>
+  	</security-constraint>
+	
+ <servlet>
+  <servlet-name>SystemServiceServlet</servlet-name>
+  <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+  <init-param>
+   <param-name>services</param-name>
+   <param-value/>
+  </init-param>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>SystemServiceServlet</servlet-name>
+  <url-pattern>/_ah/spi/*</url-pattern>
+ </servlet-mapping>
+</web-app>
