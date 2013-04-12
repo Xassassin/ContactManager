@@ -11,6 +11,7 @@ import javax.persistence.OneToMany;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.users.User;
 
 @Entity(name = "Person")
 public class Person implements Serializable{
@@ -21,12 +22,19 @@ public class Person implements Serializable{
 
 	@Id
     Key user_id;
+	
+	private String user;
     
     @OneToMany(cascade = CascadeType.ALL)
 	private List<Contact> contacts;
+    
+    public Person(User user) {
+        this.user_id = KeyFactory.createKey("Person",user.getUserId());
+    }
 
     public Person(String user_id) {
         this.user_id = KeyFactory.createKey("Person",user_id);
+        this.user = user_id;
     }
 
     public String getUserId() {
@@ -46,5 +54,13 @@ public class Person implements Serializable{
         }
         return contacts;
     }
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
 
 }

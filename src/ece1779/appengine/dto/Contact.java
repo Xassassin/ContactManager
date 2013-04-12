@@ -58,5 +58,24 @@ public class Contact implements Serializable{
 	public void setId(Key id) {
 		this.id = id;
 	}
+	
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof Contact)) {
+			return false;
+		}
+		
+		if (this == other) {
+			return true;
+		}
+		
+		Contact c = (Contact) other;
+		
+		if (this.getId() != null && c.getId() != null) {
+			if (this.getId().equals(c.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

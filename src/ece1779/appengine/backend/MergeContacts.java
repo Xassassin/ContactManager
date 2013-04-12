@@ -14,6 +14,7 @@ import com.google.apphosting.api.DeadlineExceededException;
 import ece1779.appengine.dto.Contact;
 import ece1779.appengine.dto.Detail;
 import ece1779.appengine.dto.Person;
+import ece1779.appengine.jpa.ContactDAO;
 import ece1779.appengine.jpa.PersonDAO;
 
 @SuppressWarnings("serial")
@@ -28,7 +29,7 @@ public class MergeContacts extends HttpServlet {
 			log.info("Task ran, no person passed in.");
 		} else {
 			String userId = req.getParameter("person");
-			log.info("Meging Contacts for " + userId);
+			log.info("Merging Contacts for " + userId);
 			PersonDAO pao = new PersonDAO();
 			Person person = pao.getPerson(userId);
 			if (person != null) {
@@ -36,19 +37,57 @@ public class MergeContacts extends HttpServlet {
 				List<Contact> removedContacts = new ArrayList<Contact>();
 
 				if (contacts != null && !contacts.isEmpty()) {
+					log.info("Contacts Not Empty");
 					for (Contact contact : contacts) {
 						for (Contact contact2 : contacts) {
-							if (contact.getName() == contact2.getName()) {
-								if (contact.getId() != contact.getId()) {
-									mergeContacts(contact, contact2);
-									removedContacts.add(contact2);
+							log.info("Comparing Names: " + contact.getName()
+									+ " with " + contact2.getName());
+							if (contact.getName().equalsIgnoreCase(
+									contact2.getName())) {
+								log.info("Names were equal. Comparing Ids");
+								log.info("Comparing Ids: "
+										+ contact.getId().toString() + " with "
+										+ contact2.getId().toString());
+								log.info("Comparing Ids: "
+										+ contact.getId().equals(
+												contact2.getId()));
+								if (!contact.getId().equals(contact2.getId())) {
+									log.info("Found Same Contact");
+									contact = mergeContacts(contact, contact2);
+									if (!removedContacts.contains(contact2)) {
+										removedContacts.add(contact2);
+									}
+
 								}
 							}
-
 						}
 					}
-					
-					person.getContacts().removeAll(removedContacts);
+					System.out.println("Removing: " + removedContacts.size()
+							+ " contacts.");
+					for (Contact c : removedContacts) {
+						System.out.println("Contact: " + c.getName());
+						System.out.println("Contact: " + c.getId());
+					}
+
+					System.out.println("Existing Contacts.");
+					for (Contact c : person.getContacts()) {
+						System.out.println("Contact: " + c.getName());
+						System.out.println("Contact: " + c.getId());
+					}
+
+					contacts.removeAll(removedContacts);
+					if (contacts.isEmpty()) {
+						System.out.println("Contact is empty");
+						person.setContacts(null);
+					} else {
+						person.setContacts(contacts);
+					}
+
+					System.out.println("After Set Contacts.");
+					for (Contact c : person.getContacts()) {
+						System.out.println("Contact: " + c.getName());
+						System.out.println("Contact: " + c.getId());
+					}
 					pao.savePerson(person);
 
 				} else {
@@ -62,7 +101,7 @@ public class MergeContacts extends HttpServlet {
 		}
 	}
 
-	private void mergeContacts(Contact contact1, Contact contact2) {
+	private Contact mergeContacts(Contact contact1, Contact contact2) {
 		List<Detail> newDetails = new ArrayList<Detail>();
 		for (Detail detail1 : contact1.getDetail()) {
 			int count = 0;
@@ -82,7 +121,7 @@ public class MergeContacts extends HttpServlet {
 				}
 			}
 		}
-		
+
 		for (Detail detail : contact2.getDetail()) {
 			if (!newDetails.contains(detail)) {
 				Detail newDetail = new Detail();
@@ -92,8 +131,9 @@ public class MergeContacts extends HttpServlet {
 				newDetails.add(newDetail);
 			}
 		}
-		
+
 		contact1.getDetail().addAll(newDetails);
+		return contact1;
 	}
 
 }

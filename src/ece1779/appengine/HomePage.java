@@ -60,8 +60,14 @@ public class HomePage extends HttpServlet {
     	out.println("<form action='deleteContact' method='post'>");
     	out.println("Enter a contact index to delete : <input type='text' name='index' align='right'>");
     	out.println("		<input type='submit' value='delete'>");
-    	out.println("</form>");            	
-    	out.println("<hr/>");   	
+    	out.println("</form>");
+    	out.println("<hr/>");
+    	
+    	out.println("<form action='merge' method='post'>");
+    	out.println("Click to merge conatcs. Note, merging will happen in the background. Refresh to see changes.");
+    	out.println("		<input type='submit' value='merge'>");
+    	out.println("</form>");
+    	out.println("<hr/>");
     	
 //        EntityManager em = EMF.get().createEntityManager();
         

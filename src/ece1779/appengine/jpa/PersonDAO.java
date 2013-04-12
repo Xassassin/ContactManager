@@ -26,14 +26,18 @@ public class PersonDAO {
 		try {
 			MemcacheService memcache = MemcacheServiceFactory
 					.getMemcacheService();
+			System.out.println("Item Count:" + memcache.getStatistics().getItemCount());
 			if (memcache.contains(cacheKey)) {
 				person = (Person) memcache.get(cacheKey);
+//				if (person != null) {
 				return person;
+//				}
 			}
 			System.out.println("CACHE MISS: " + cacheKey);
 			// If the UserPrefs object isn't in memcache,
 			// fall through to the datastore.
 		} catch (MemcacheServiceException e) {
+			e.printStackTrace();
 			// If there is a problem with the cache,
 			// fall through to the datastore.
 		}
@@ -42,8 +46,10 @@ public class PersonDAO {
 		try {
 			person = em.find(Person.class, userId);
 			if (person == null) {
-				person = new Person(userId);
-				savePerson(person);
+				System.out.println("Did not find Person in datastore.");
+//				person = new Person(userId);
+//				savePerson(person);
+				return null;
 			} else {
 				cacheSet(person);
 			}
@@ -58,6 +64,8 @@ public class PersonDAO {
 		try {
 			em.merge(person);
 			cacheDelete(person);
+		} catch (Exception exc) {
+			exc.printStackTrace();
 		} finally {
 			em.close();
 		}
@@ -67,10 +75,12 @@ public class PersonDAO {
 		try {
 			MemcacheService memcache = MemcacheServiceFactory
 					.getMemcacheService();
-			String cacheKey = getCacheKeyForUser(person.getUserId());
+			String cacheKey = getCacheKeyForUser(person.getUser());
+			System.out.println("CACHE FILL: " + cacheKey);
 			memcache.put(cacheKey, person);
+			System.out.println("Item Count:" + memcache.getStatistics().getItemCount());
 		} catch (MemcacheServiceException e) {
-			// Ignore cache problems, nothing we can do.
+			e.printStackTrace();
 		}
 	}
 
@@ -78,7 +88,7 @@ public class PersonDAO {
 		try {
 			MemcacheService memcache = MemcacheServiceFactory
 					.getMemcacheService();
-			String cacheKey = getCacheKeyForUser(person.getUserId());
+			String cacheKey = getCacheKeyForUser(person.getUser());
 			memcache.delete(cacheKey);
 		} catch (MemcacheServiceException e) {
 			// Ignore cache problems, nothing we can do.

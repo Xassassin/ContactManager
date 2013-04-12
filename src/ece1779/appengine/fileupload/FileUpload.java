@@ -152,6 +152,7 @@ public class FileUpload extends HttpServlet {
 								}
 								
 								pao.savePerson(person);
+								pao.getPerson(user.getUserId());
 
 //								em.persist(person);
 //								txn.commit();
