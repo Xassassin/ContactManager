@@ -50,7 +50,7 @@ public class PersonDAO {
 		} finally {
 			em.close();
 		}
-		return null;
+		return person;
 	}
 
 	public void savePerson(Person person) {
@@ -68,7 +68,7 @@ public class PersonDAO {
 			MemcacheService memcache = MemcacheServiceFactory
 					.getMemcacheService();
 			String cacheKey = getCacheKeyForUser(person.getUserId());
-			memcache.put(cacheKey, this);
+			memcache.put(cacheKey, person);
 		} catch (MemcacheServiceException e) {
 			// Ignore cache problems, nothing we can do.
 		}

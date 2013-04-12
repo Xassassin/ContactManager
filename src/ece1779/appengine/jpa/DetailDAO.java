@@ -46,7 +46,7 @@ public class DetailDAO {
 		} finally {
 			em.close();
 		}
-		return null;
+		return detail;
 	}
 
 	public void saveDetail(Detail detail) {
@@ -64,7 +64,7 @@ public class DetailDAO {
 			MemcacheService memcache = MemcacheServiceFactory
 					.getMemcacheService();
 			String cacheKey = getCacheKeyForDetail(detail.getId().toString());
-			memcache.put(cacheKey, this);
+			memcache.put(cacheKey, detail);
 		} catch (MemcacheServiceException e) {
 			// Ignore cache problems, nothing we can do.
 		}

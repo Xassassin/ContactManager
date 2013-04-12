@@ -4,18 +4,18 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.servlet.http.*;
-
-import a_vcard.android.syncml.pim.VNode;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 import ece1779.appengine.dto.Contact;
+import ece1779.appengine.dto.Detail;
 import ece1779.appengine.dto.Person;
-import ece1779.appengine.jpa.EMF;
+import ece1779.appengine.jpa.PersonDAO;
 
 @SuppressWarnings("serial")
 public class HomePage extends HttpServlet {
@@ -44,37 +44,63 @@ public class HomePage extends HttpServlet {
     	out.println("			<font color='white'><b>vCard Manager</b></font>");        	
     	out.println("		</td>");
     	out.println("	</tr>");
-    	out.println("	<tr>");
-    	out.println("		<td vertical-align=top bgcolor='white' >");
-    	out.println("			<font color='black'><b>Upload a vCard</b></font>");
-    	out.println("			<form action='FileUpload' enctype='multipart/form-data' method='post'>");
-    	out.println("				<input type='file' name='theFile'>");
-    	out.println("				<input type='submit' value='Send'>");
-    	out.println("				<input type='reset'></form>");                    	
-    	out.println("		</td>");
-    	out.println("	</tr>");        	
-    	out.println("	<tr>");
-    	out.println("		<td bgcolor='white' valign='middle'>");	
-    	out.println("			<p>Welcome, " + user.getNickname() + "! You can <a href=\"" + userService.createLogoutURL("/") + "\">sign out</a>.</p>");
-    	out.println("		</td>");
-    	out.println("	</tr>");        	
-    	out.println("	<tr>");
-    	out.println("		<td vertical-align=top bgcolor='white'>");          	
-        EntityManager em = EMF.get().createEntityManager();	
-        try {
-        	Person person = em.find(Person.class, user.getNickname());
+    	out.println("</table>");
+
+    	out.println("<p>Welcome, " + user.getNickname() + "! You can <a href=\"" + userService.createLogoutURL("/") + "\">sign out</a>.</p>");
+
+
+    	out.println("<font color='black'><b>Upload a vCard</b></font>");
+    	out.println("<form action='FileUpload' enctype='multipart/form-data' method='post'>");
+    	out.println("	<input type='file' name='theFile'>");
+    	out.println("	<input type='submit' value='Send'>");
+    	out.println("	<input type='reset'></form>");                    	
+
+    	out.println("<hr/>");
+
+    	out.println("<form action='deleteContact' method='post'>");
+    	out.println("Enter a contact index to delete : <input type='text' name='index' align='right'>");
+    	out.println("		<input type='submit' value='delete'>");
+    	out.println("</form>");            	
+    	out.println("<hr/>");   	
+    	
+//        EntityManager em = EMF.get().createEntityManager();
+        
+        PersonDAO pao = new PersonDAO();
+        
+//        try {
+        	Person person = pao.getPerson(user.getUserId());
+        	if (person == null) {
+        		person = new Person(user.getUserId());
+        		pao.savePerson(person);
+        	}
+        	
         	if (person != null) {
+        		
         		List<Contact> Contacts = person.getContacts();
-        		for (Contact contact : Contacts) {
-        			out.println("contact name is " + contact.getName() + "!");
+        		int contactSize = Contacts.size();
+        		if (contactSize == 0) {
+        			out.println("You have no contact. Would you like to upload a vCard file?");
+        		} else {
+        	    	for (int i=0;i<contactSize;i++) {
+            	    	out.println("<table border = 1 width = 900 align='left'>");
+            	    	Contact currentContact = Contacts.get(i);
+
+            	    	out.println("<tr><th>Index</th><th> Name </th><th> Phone </th><th>Address</th></tr>");
+            	    	out.println("<tr>");
+            	    	out.println("	<th>"+ i +"</th>");
+            	    	out.println("	<th>" + currentContact.getName() + "</th>");
+        	    		List<Detail> Details = currentContact.getDetail();
+        	    		for (Detail detail : Details) {
+        	    			out.println("	<th>" + detail.getValue() + "</th>");
+        	    		}
+            	    	out.println("</tr>");             	    		
+        	            out.println("</table>");	
+        	    	}
         		}
         	}
-        } finally {
-			  em.close();
-		}
-    	out.println("		</td>");
-    	out.println("	</tr>");
-    	out.println("</table>");        	
+//        } finally {
+//			  em.close();
+//		}  	
         out.println("</body>");
         out.println("</html>");
     }

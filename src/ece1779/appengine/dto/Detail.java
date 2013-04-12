@@ -6,18 +6,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import com.google.appengine.api.datastore.Key;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.appengine.api.datastore.KeyFactory;
 
 @Entity(name = "Detail")
-public class Detail {
+public class Detail implements Serializable{
 	
-	private static final int ADDRESS = 1;
-	private static final int PHONE = 2;
-	private static final int EMAIL = 3;
-	private static final int URL = 4;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8422959252650162293L;
+	public static final int ADDRESS = 1;
+	public static final int PHONE = 2;
+	public static final int EMAIL = 3;
+	public static final int URL = 4;
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)    
@@ -25,7 +30,7 @@ public class Detail {
 
     private String item;
     private String value;
-    private int category;
+    private int category = 0;
 
     public void setItem(String item) {
         this.item = item;

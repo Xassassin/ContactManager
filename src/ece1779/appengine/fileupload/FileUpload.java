@@ -19,6 +19,7 @@ import ece1779.appengine.dto.Contact;
 import ece1779.appengine.dto.Detail;
 import ece1779.appengine.dto.Person;
 import ece1779.appengine.jpa.EMF;
+import ece1779.appengine.jpa.PersonDAO;
 
 import java.io.InputStream;
 import java.io.IOException;
@@ -76,21 +77,20 @@ public class FileUpload extends HttpServlet {
 
 					// get all parsed contacts
 					List<VNode> pimContacts = builder.vNodeList;
-					EntityManager em = EMF.get().createEntityManager();
-					EntityTransaction txn = em.getTransaction();
-					try {
-
-						Person person = em.find(Person.class, user.getNickname());
+					PersonDAO pao = new PersonDAO();
+//					try {
 						
-						if (person == null) {
-							person = new Person(user.getNickname());
-							em.persist(person);
-						}
+						Person person = pao.getPerson(user.getUserId());
+						
+//						if (person == null) {
+//							person = new Person(user.getNickname());
+//							em.persist(person);
+//						}
 						
 						if (person != null) {
-							txn.begin();
-							try {
-								person = new Person(user.getNickname());
+//							txn.begin();
+//							try {
+//								person = new Person(user.getNickname());
 								System.out.println("New Person Created: "
 										+ user.getNickname());
 								for (VNode contact : pimContacts) {
@@ -131,6 +131,7 @@ public class FileUpload extends HttpServlet {
 									if (tel != null) {
 										Detail detail1 = new Detail();
 										detail1.setItem("TEL");
+										detail1.setCategory(Detail.PHONE);
 										detail1.setValue(tel);
 										a_contact.getDetail().add(detail1);
 										System.out.println("TEL: " + tel);
@@ -140,6 +141,7 @@ public class FileUpload extends HttpServlet {
 									if (addr != null) {
 										Detail detail2 = new Detail();
 										detail2.setItem("ADR");
+										detail2.setCategory(Detail.ADDRESS);
 										detail2.setValue(addr);
 										System.out.println("ADR: " + addr);
 										a_contact.getDetail().add(detail2);
@@ -148,20 +150,22 @@ public class FileUpload extends HttpServlet {
 //									em.persist(contact);
 									person.getContacts().add(a_contact);
 								}
+								
+								pao.savePerson(person);
 
-								em.persist(person);
-								txn.commit();
-							} catch (Exception exc) {
-								exc.printStackTrace();
-							} finally {
-								if (txn.isActive()) {
-									txn.rollback();
-								}
-							}
+//								em.persist(person);
+//								txn.commit();
+//							} catch (Exception exc) {
+//								exc.printStackTrace();
+//							} finally {
+//								if (txn.isActive()) {
+//									txn.rollback();
+//								}
+//							}
 						}
-					} finally {
-						em.close();
-					}
+//					} finally {
+//						em.close();
+//					}
 
 				}
 			}

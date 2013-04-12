@@ -8,6 +8,15 @@
     		<servlet-name>onlyadmin</servlet-name>
     		<url-pattern>/onlyadmin</url-pattern>
   	</servlet-mapping>
+    
+    <servlet>
+	    <servlet-name>deleteContact</servlet-name>
+	    <servlet-class>ece1779.appengine.DeleteContact</servlet-class>
+	</servlet>
+  	<servlet-mapping>
+    	<servlet-name>deleteContact</servlet-name>
+    	<url-pattern>/deleteContact</url-pattern>
+  	</servlet-mapping>
 
 	<servlet>
 	    <servlet-name>prefs</servlet-name>

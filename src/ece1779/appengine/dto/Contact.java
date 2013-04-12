@@ -1,5 +1,6 @@
 package ece1779.appengine.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,8 +14,13 @@ import javax.persistence.OneToMany;
 import com.google.appengine.api.datastore.Key;
 
 @Entity(name = "Contact")
-public class Contact {
-    @Id
+public class Contact implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6640702544946967268L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)    
     private Key id;
 

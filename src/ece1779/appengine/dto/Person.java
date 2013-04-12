@@ -1,5 +1,6 @@
 package ece1779.appengine.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +13,13 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
 @Entity(name = "Person")
-public class Person {
-    @Id
+public class Person implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7881276867113228172L;
+
+	@Id
     Key user_id;
     
     @OneToMany(cascade = CascadeType.ALL)

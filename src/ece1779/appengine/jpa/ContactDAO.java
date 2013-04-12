@@ -45,7 +45,7 @@ public class ContactDAO {
 		} finally {
 			em.close();
 		}
-		return null;
+		return contact;
 	}
 
 	public void saveContact(Contact contact) {
@@ -63,7 +63,7 @@ public class ContactDAO {
 			MemcacheService memcache = MemcacheServiceFactory
 					.getMemcacheService();
 			String cacheKey = getCacheKeyForContact(contact.getId().toString());
-			memcache.put(cacheKey, this);
+			memcache.put(cacheKey, contact);
 		} catch (MemcacheServiceException e) {
 			// Ignore cache problems, nothing we can do.
 		}
