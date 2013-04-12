@@ -14,9 +14,14 @@ public class PersonDAO {
 	public PersonDAO() {
 
 	}
-
+	
 	public Person getPerson(User user) {
-		String cacheKey = getCacheKeyForUser(user.getUserId());
+		return getPerson(user.getUserId());
+		
+	}
+
+	public Person getPerson(String userId) {
+		String cacheKey = getCacheKeyForUser(userId);
 		Person person;
 		try {
 			MemcacheService memcache = MemcacheServiceFactory
@@ -35,9 +40,9 @@ public class PersonDAO {
 
 		EntityManager em = EMF.get().createEntityManager();
 		try {
-			person = em.find(Person.class, user.getUserId());
+			person = em.find(Person.class, userId);
 			if (person == null) {
-				person = new Person(user.getUserId());
+				person = new Person(userId);
 				savePerson(person);
 			} else {
 				cacheSet(person);

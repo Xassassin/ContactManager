@@ -64,7 +64,7 @@ public class HomePage extends HttpServlet {
         try {
         	Person person = em.find(Person.class, user.getNickname());
         	if (person != null) {
-        		List<Contact> Contacts = person.getContact();
+        		List<Contact> Contacts = person.getContacts();
         		for (Contact contact : Contacts) {
         			out.println("contact name is " + contact.getName() + "!");
         		}

@@ -68,6 +68,16 @@ public class ContactDAO {
 			// Ignore cache problems, nothing we can do.
 		}
 	}
+	
+	public void deleteContact(Contact contact) {
+		EntityManager em = EMF.get().createEntityManager();
+		try {
+			em.remove(contact);
+			cacheDelete(contact);
+		} finally {
+			em.close();
+		}
+	}
 
 	public void cacheDelete(Contact contact) {
 		try {

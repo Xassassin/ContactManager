@@ -7,6 +7,7 @@ import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceException;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
+import ece1779.appengine.dto.Contact;
 import ece1779.appengine.dto.Detail;
 
 public class DetailDAO {
@@ -66,6 +67,16 @@ public class DetailDAO {
 			memcache.put(cacheKey, this);
 		} catch (MemcacheServiceException e) {
 			// Ignore cache problems, nothing we can do.
+		}
+	}
+	
+	public void deleteDetail(Detail detail) {
+		EntityManager em = EMF.get().createEntityManager();
+		try {
+			em.remove(detail);
+			cacheDelete(detail);
+		} finally {
+			em.close();
 		}
 	}
 

@@ -31,10 +31,10 @@ public class Person {
 		this.user_id = user_id;
 	}
 
-    public void setContact(List<Contact> contacts) {
+    public void setContacts(List<Contact> contacts) {
         this.contacts = contacts;
     }
-    public List<Contact> getContact() {
+    public List<Contact> getContacts() {
         if (contacts == null) {
         	contacts = new ArrayList<Contact>();
         }

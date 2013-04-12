@@ -146,7 +146,7 @@ public class FileUpload extends HttpServlet {
 //										em.persist(detail2);
 									}
 //									em.persist(contact);
-									person.getContact().add(a_contact);
+									person.getContacts().add(a_contact);
 								}
 
 								em.persist(person);
