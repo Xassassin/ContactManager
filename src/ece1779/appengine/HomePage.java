@@ -60,20 +60,17 @@ public class HomePage extends HttpServlet {
     	out.println("<form action='deleteContact' method='post'>");
     	out.println("Enter a contact index to delete : <input type='text' name='index' align='right'>");
     	out.println("		<input type='submit' value='delete'>");
-    	out.println("</form>");
+    	out.println("</form>");            	
+    	out.println("<hr/>"); 
+    	
+    	out.println("<form action='merge' method='post'>");    	
+    	out.println("Click to merge conatcs. Note, merging will happen in the background. Refresh to see changes.");    	
+    	out.println("		<input type='submit' value='merge'>");    	
+    	out.println("</form>");    	
     	out.println("<hr/>");
     	
-    	out.println("<form action='merge' method='post'>");
-    	out.println("Click to merge conatcs. Note, merging will happen in the background. Refresh to see changes.");
-    	out.println("		<input type='submit' value='merge'>");
-    	out.println("</form>");
-    	out.println("<hr/>");
-    	
-//        EntityManager em = EMF.get().createEntityManager();
-        
         PersonDAO pao = new PersonDAO();
         
-//        try {
         	Person person = pao.getPerson(user.getUserId());
         	if (person == null) {
         		person = new Person(user.getUserId());
@@ -87,26 +84,31 @@ public class HomePage extends HttpServlet {
         		if (contactSize == 0) {
         			out.println("You have no contact. Would you like to upload a vCard file?");
         		} else {
+        	    	out.println("<table border = 1 width = 900");
+        	    	out.println("<tr><th>Index</th><th> Name </th><th> Phone </th><th>Address</th></tr>");
         	    	for (int i=0;i<contactSize;i++) {
-            	    	out.println("<table border = 1 width = 900 align='left'>");
             	    	Contact currentContact = Contacts.get(i);
-
-            	    	out.println("<tr><th>Index</th><th> Name </th><th> Phone </th><th>Address</th></tr>");
             	    	out.println("<tr>");
             	    	out.println("	<th>"+ i +"</th>");
             	    	out.println("	<th>" + currentContact.getName() + "</th>");
         	    		List<Detail> Details = currentContact.getDetail();
-        	    		for (Detail detail : Details) {
-        	    			out.println("	<th>" + detail.getValue() + "</th>");
+        	    		if (Details.size() == 2) {
+        	    			out.println("	<th>" + Details.get(0).getValue() + "</th>");
+        	    			out.println("	<th>" + Details.get(1).getValue() + "</th>");
+        	    		}
+        	    		for (int j=2; j<Details.size();j=j+2) {
+        	    			out.println("	<th></th>");
+        	    			out.println("	<th></th>");
+        	    			out.println("	<th>" + Details.get(j).getValue() + "</th>");
+        	    			out.println("	<th>" + Details.get(j+1).getValue() + "</th>");        	    			
         	    		}
             	    	out.println("</tr>");             	    		
-        	            out.println("</table>");	
+
         	    	}
+    	            out.println("</table>");	
         		}
         	}
-//        } finally {
-//			  em.close();
-//		}  	
+
         out.println("</body>");
         out.println("</html>");
     }

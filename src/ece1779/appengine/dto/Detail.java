@@ -1,16 +1,14 @@
 package ece1779.appengine.dto;
 
+import java.io.Serializable;
+
+import javax.jdo.annotations.Persistent;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 import com.google.appengine.api.datastore.Key;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.appengine.api.datastore.KeyFactory;
 
 @Entity(name = "Detail")
 public class Detail implements Serializable {
@@ -28,8 +26,11 @@ public class Detail implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Key id;
 
+	@Persistent
 	private String item;
+	@Persistent
 	private String value;
+	@Persistent
 	private int category = 0;
 
 	public void setItem(String item) {
@@ -64,23 +65,23 @@ public class Detail implements Serializable {
 		this.id = id;
 	}
 
-//	public boolean equals(Object other) {
-//		if (other == null || !(other instanceof Detail)) {
-//			return false;
-//		}
-//
-//		if (this == other) {
-//			return true;
-//		}
-//
-//		Detail d = (Detail) other;
-//
-//		if (this.getId() != null && d.getId() != null) {
-//			if (this.getId().equals(d.getId())) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
+	// public boolean equals(Object other) {
+	// if (other == null || !(other instanceof Detail)) {
+	// return false;
+	// }
+	//
+	// if (this == other) {
+	// return true;
+	// }
+	//
+	// Detail d = (Detail) other;
+	//
+	// if (this.getId() != null && d.getId() != null) {
+	// if (this.getId().equals(d.getId())) {
+	// return true;
+	// }
+	// }
+	// return false;
+	// }
 
 }

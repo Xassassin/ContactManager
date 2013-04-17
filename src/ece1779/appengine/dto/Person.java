@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.annotations.Element;
+import javax.jdo.annotations.Persistent;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,9 +25,12 @@ public class Person implements Serializable{
 	@Id
     Key user_id;
 	
+	@Persistent
 	private String user;
     
-    @OneToMany(cascade = CascadeType.ALL)
+	@Persistent
+	@OneToMany(cascade = CascadeType.ALL)
+	@Element(dependent = "true")
 	private List<Contact> contacts;
     
     public Person(User user) {
