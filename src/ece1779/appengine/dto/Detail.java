@@ -2,16 +2,16 @@ package ece1779.appengine.dto;
 
 import java.io.Serializable;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
 
-@Entity(name = "Detail")
-public class Detail implements Serializable {
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
+public class Detail implements Serializable, Comparable<Detail> {
 
 	/**
 	 * 
@@ -21,17 +21,25 @@ public class Detail implements Serializable {
 	public static final int PHONE = 2;
 	public static final int EMAIL = 3;
 	public static final int URL = 4;
+	public static final int OTHER = 5;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key id;
+	
+	@Persistent
+    private Contact contact;
 
 	@Persistent
 	private String item;
 	@Persistent
 	private String value;
 	@Persistent
-	private int category = 0;
+	private int category;
+	
+	public Detail() {
+	    
+	}
 
 	public void setItem(String item) {
 		this.item = item;
@@ -64,6 +72,26 @@ public class Detail implements Serializable {
 	public void setId(Key id) {
 		this.id = id;
 	}
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    @Override
+    public int compareTo(Detail o) {
+        Integer category1 = Integer.valueOf(this.getCategory());
+        Integer category2 = Integer.valueOf(o.getCategory());
+        int comapered = category1.compareTo(category2);
+        if (comapered != 0) {
+            return comapered;
+        } else {
+            return this.getItem().compareTo(o.getItem());
+        }
+    }
 
 	// public boolean equals(Object other) {
 	// if (other == null || !(other instanceof Detail)) {

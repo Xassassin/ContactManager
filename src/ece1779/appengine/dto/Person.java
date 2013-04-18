@@ -5,31 +5,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.annotations.Element;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 
-@Entity(name = "Person")
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
 public class Person implements Serializable{
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 7881276867113228172L;
 
-	@Id
+	@PrimaryKey
     Key user_id;
 	
 	@Persistent
 	private String user;
     
-	@Persistent
-	@OneToMany(cascade = CascadeType.ALL)
+	@Persistent(mappedBy = "person")
 	@Element(dependent = "true")
 	private List<Contact> contacts;
     
@@ -46,7 +44,7 @@ public class Person implements Serializable{
         return KeyFactory.keyToString(user_id);
     }
 
-    public void setUserId(com.google.appengine.api.datastore.Key user_id) {
+    public void setUserId(Key user_id) {
 		this.user_id = user_id;
 	}
 

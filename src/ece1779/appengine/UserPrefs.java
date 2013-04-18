@@ -43,30 +43,30 @@ public class UserPrefs {
         this.user = user;
     }
 
-    public static UserPrefs getPrefsForUser(User user) {
-        UserPrefs userPrefs = null;
-
-        EntityManager em = EMF.get().createEntityManager();
-        try {
-            userPrefs = em.find(UserPrefs.class, user.getUserId());
-            if (userPrefs == null) {
-                userPrefs = new UserPrefs(user.getUserId());
-                userPrefs.setUser(user);
-                em.persist(userPrefs);
-            }
-        } finally {
-            em.close();
-        }
-
-        return userPrefs;
-    }
-
-    public void save() {
-        EntityManager em = EMF.get().createEntityManager();
-        try {
-            em.merge(this);
-        } finally {
-            em.close();
-        }
-    }
+//    public static UserPrefs getPrefsForUser(User user) {
+//        UserPrefs userPrefs = null;
+//
+//        EntityManager em = EMF.get().createEntityManager();
+//        try {
+//            userPrefs = em.find(UserPrefs.class, user.getUserId());
+//            if (userPrefs == null) {
+//                userPrefs = new UserPrefs(user.getUserId());
+//                userPrefs.setUser(user);
+//                em.persist(userPrefs);
+//            }
+//        } finally {
+//            em.close();
+//        }
+//
+//        return userPrefs;
+//    }
+//
+//    public void save() {
+//        EntityManager em = EMF.get().createEntityManager();
+//        try {
+//            em.merge(this);
+//        } finally {
+//            em.close();
+//        }
+//    }
 }

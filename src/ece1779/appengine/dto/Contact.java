@@ -5,40 +5,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.annotations.Element;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
 
-@Entity(name = "Contact")
-public class Contact implements Serializable {
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
+public class Contact implements Serializable, Comparable<Contact> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6640702544946967268L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key id;
 
 	@Persistent
 	private String Name;
-
+	
 	@Persistent
-	@OneToMany(cascade = CascadeType.ALL)
-	@Element(dependent = "true")
+	private Person person;
+	
+	@Persistent(mappedBy = "contact")
+    @Element(dependent = "true")
 	private List<Detail> details;
 
 	public Contact() {
+	      
 	}
 
-	public void setName(String Name) {
-		this.Name = Name;
+	public void setName(String name) {
+		this.Name = name;
 	}
 
 	public String getName() {
@@ -82,5 +83,18 @@ public class Contact implements Serializable {
 		}
 		return false;
 	}
+
+    @Override
+    public int compareTo(Contact o) {
+        return this.getName().compareTo(o.getName());
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
 
 }

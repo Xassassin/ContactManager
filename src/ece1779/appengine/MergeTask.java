@@ -29,7 +29,7 @@ public class MergeTask extends HttpServlet {
 			queue.add(taskOptions);
 		}
 		
-		resp.sendRedirect("HomePage");
+		resp.sendRedirect("home.jsp");
 
 	}
 

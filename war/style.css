@@ -1,0 +1,31 @@
+.appTitle {
+	color: white;
+	font-family: sans-serif;
+	font-weight: bold;
+	text-align: left;
+	float: left;
+	margin-left: 10px;
+	margin-top: 10px;
+}
+
+.uploadForm {
+	border: 1px black solid;
+	clear: both;
+	text-align: center;
+}
+
+.category {
+	clear: both;
+	float: left;
+	width: 100px;
+}
+
+.item {
+	float: left;
+	width: 100px;
+}
+
+.value {
+	float: left;
+	width: 300px;
+}

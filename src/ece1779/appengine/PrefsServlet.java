@@ -17,15 +17,15 @@ public class PrefsServlet extends HttpServlet {
         UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();
 
-        UserPrefs userPrefs = UserPrefs.getPrefsForUser(user);
-
-        try {
-            int tzOffset = new Integer(req.getParameter("tz_offset")).intValue();
-            userPrefs.setTzOffset(tzOffset);
-            userPrefs.save();
-        } catch (NumberFormatException nfe) {
-            // User entered a value that wasn't an integer.  Ignore for now.
-        }
+//        UserPrefs userPrefs = UserPrefs.getPrefsForUser(user);
+//
+//        try {
+//            int tzOffset = new Integer(req.getParameter("tz_offset")).intValue();
+//            userPrefs.setTzOffset(tzOffset);
+//            userPrefs.save();
+//        } catch (NumberFormatException nfe) {
+//            // User entered a value that wasn't an integer.  Ignore for now.
+//        }
 
         resp.sendRedirect("/clock3");
     }

@@ -1,15 +1,17 @@
 package ece1779.appengine.jpa;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.jdo.JDOHelper;
+import javax.jdo.PersistenceManagerFactory;
+
+
 
 public final class EMF {
-    private static final EntityManagerFactory emfInstance =
-        Persistence.createEntityManagerFactory("transactions-optional");
+    private static final PersistenceManagerFactory pmfInstance =
+        JDOHelper.getPersistenceManagerFactory("transactions-optional");
 
     private EMF() {}
 
-    public static EntityManagerFactory get() {
-        return emfInstance;
+    public static PersistenceManagerFactory get() {
+        return pmfInstance;
     }
 }

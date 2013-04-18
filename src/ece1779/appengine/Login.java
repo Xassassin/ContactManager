@@ -81,7 +81,7 @@ public class Login extends HttpServlet {
             out.println("</body>");
             out.println("</html>");
         } else {
-        	resp.sendRedirect("HomePage");
+        	resp.sendRedirect("home.jsp");
 
         }
     }
