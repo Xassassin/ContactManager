@@ -21,7 +21,16 @@
 		<servlet-name>deleteContact</servlet-name>
 		<url-pattern>/deleteContact</url-pattern>
 	</servlet-mapping>
-	
+
+	<servlet>
+		<servlet-name>addContact</servlet-name>
+		<servlet-class>ece1779.appengine.AddContact</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>addContact</servlet-name>
+		<url-pattern>/addContact</url-pattern>
+	</servlet-mapping>
+		
 	<servlet>
 		<servlet-name>merge</servlet-name>
 		<servlet-class>ece1779.appengine.MergeTask</servlet-class>
@@ -29,15 +38,6 @@
 	<servlet-mapping>
 		<servlet-name>merge</servlet-name>
 		<url-pattern>/merge</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>prefs</servlet-name>
-		<servlet-class>ece1779.appengine.PrefsServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>prefs</servlet-name>
-		<url-pattern>/prefs</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -49,16 +49,6 @@
 		<url-pattern>/FileUpload</url-pattern>
 	</servlet-mapping>
 
-
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>prefs</web-resource-name>
-			<url-pattern>/prefs</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>*</role-name>
-		</auth-constraint>
-	</security-constraint>
 
 	<servlet>
 		<servlet-name>Login</servlet-name>

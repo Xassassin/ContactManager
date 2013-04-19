@@ -1,4 +1,6 @@
 <%@page import="com.google.appengine.api.datastore.KeyFactory"%>
+<%@page import="com.google.apphosting.api.DeadlineExceededException"%>
+<%@page import="ece1779.appengine.jpa.ContactDAO"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.Collection"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
@@ -34,9 +36,7 @@
 				align='right' height='40' />
 		</div>
 		<div id="mainMessage">
-			<div id="welcomeMessage" style="float: left; height: 50px;">
-				<span> Hello, ${fn:escapeXml(user.nickname)}!</span>
-			</div>
+			<div id="welcomeMessage" style="float: left; height: 50px;"></div>
 			<div id="signoutMessage" style="float: right; height: 50px;">
 				<span><a
 					href="<%=userService.createLogoutURL(request.getRequestURI())%>">sign
@@ -57,56 +57,17 @@
 					type='submit' value='Merge'>
 			</form>
 		</div>
-		<div id="contacts">
-			<%
-			    PersonDAO pao = new PersonDAO();
-
-			        Person person = pao.getPerson(user.getUserId());
-			        if (person == null) {
-			            person = new Person(user.getUserId());
-			            pao.savePerson(person);
-			        }
-
-			        if (person != null) {
-
-			            List<Contact> contacts = person.getContacts();
-			            Collections.sort(contacts);
-			            int contactSize = contacts.size();
-			            %>
-			            
-				<form action='newContact.jsp' method='post'>
-						<input type="submit" value="Add Contact">
-				</form>
-				<%
-			            if (contactSize == 0) {
-			%>
-			<span>You have not uploaded any contacts, please upload a vCard or
-				click "Add Contact" to start.</span>
-
-			<%
-			    } else {
-			%>
-			
-			<span>Contacts</span> 
-
-			<ul>
-				<%
-				    for (int i = 0; i < contactSize; i++) {
-				                    Contact currentContact = contacts.get(i);
-				%>
-				<li><form action='showDetails.jsp' method='post'>
-							<input type="hidden" name="contactId"
-								value="<%=KeyFactory.keyToString(currentContact.getId())%>"/><input type="submit"
-								value="<%=currentContact.getName()%>">
-						</form></li>
-				<%
-				    }
-				%>
-			</ul>
-			<%
-			    }
-			        }
-			%>
+		<div>
+			<form action='addContact' method='post'>
+				
+				<table>
+				<tr><th>Name</th><th><input name='name' type='text'></th></tr>
+				<tr><th>Phone</th><th><input name='phone' type='text'></th></tr>				
+				<tr><th>Address</th><th><input name='address' type='text'></th></tr>
+				<tr><th>Email</th><th><input name='email' type='text'></th></tr>
+				</table>
+				<input type='submit' value='Submit'>
+			</form>			
 		</div>
 	</div>
 
